@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Attendance.ViewModels"
+             xmlns:models="clr-namespace:Attendance.Models"
+             x:Class="Attendance.Pages.DashboardPage"
+             x:DataType="vm:DashboardViewModel"
+             Title="{Binding Title}">
+
+    <RefreshView Command="{Binding AppearingCommand}" IsRefreshing="{Binding IsBusy}">
+        <ScrollView>
+            <VerticalStackLayout Padding="18" Spacing="16">
+
+                <VerticalStackLayout Spacing="2">
+                    <Label Text="Dashboard" Style="{StaticResource TitleLabel}" />
+                    <Label Text="A live view of your automated attendance." Style="{StaticResource SubtitleLabel}" />
+                </VerticalStackLayout>
+
+                <!-- Scheduler status card -->
+                <Border Style="{StaticResource CardFrame}">
+                    <Grid RowDefinitions="Auto, Auto" ColumnDefinitions="Auto, *">
+                        <Border Grid.RowSpan="2" Grid.Column="0"
+                                WidthRequest="14" HeightRequest="14" StrokeThickness="0"
+                                StrokeShape="RoundRectangle 7"
+                                BackgroundColor="{Binding SchedulerState, Converter={StaticResource SchedulerStateToColorConverter}}"
+                                VerticalOptions="Center" Margin="0,0,12,0" />
+                        <Label Grid.Row="0" Grid.Column="1" Text="Scheduler Status" Style="{StaticResource SectionHeaderLabel}" />
+                        <Label Grid.Row="1" Grid.Column="1" Text="{Binding SchedulerState}" Style="{StaticResource BodyLabel}" />
+                    </Grid>
+                </Border>
+
+                <!-- Today's schedule + next execution -->
+                <Grid ColumnDefinitions="*, *" ColumnSpacing="14">
+                    <Border Grid.Column="0" Style="{StaticResource CardFrame}">
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Today's Schedule" Style="{StaticResource CaptionLabel}" />
+                            <Label Text="{Binding TodaysScheduleText}" Style="{StaticResource BodyLabel}" FontAttributes="Bold" />
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Grid.Column="1" Style="{StaticResource CardFrame}">
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Next Execution" Style="{StaticResource CaptionLabel}" />
+                            <Label Text="{Binding NextExecutionText}" Style="{StaticResource BodyLabel}" FontAttributes="Bold" />
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <Border Style="{StaticResource CardFrame}">
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Today's Result" Style="{StaticResource CaptionLabel}" />
+                        <Label Text="{Binding TodaysResultText}" Style="{StaticResource BodyLabel}" FontAttributes="Bold" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Quick actions -->
+                <Label Text="Quick Actions" Style="{StaticResource SectionHeaderLabel}" />
+                <Grid ColumnDefinitions="*, *" RowDefinitions="Auto, Auto" ColumnSpacing="12" RowSpacing="12">
+                    <Button Grid.Row="0" Grid.Column="0" Text="Enable" Command="{Binding EnableSchedulerCommand}" />
+                    <Button Grid.Row="0" Grid.Column="1" Text="Pause" Style="{StaticResource SecondaryButton}" Command="{Binding PauseSchedulerCommand}" />
+                    <Button Grid.Row="1" Grid.Column="0" Text="Resume" Style="{StaticResource SecondaryButton}" Command="{Binding ResumeSchedulerCommand}" />
+                    <Button Grid.Row="1" Grid.Column="1" Text="Stop" Style="{StaticResource DangerButton}" Command="{Binding StopSchedulerCommand}" />
+                </Grid>
+
+                <!-- Recent execution history -->
+                <Grid ColumnDefinitions="*, Auto">
+                    <Label Grid.Column="0" Text="Recent Executions" Style="{StaticResource SectionHeaderLabel}" />
+                    <Button Grid.Column="1" Text="View all" Style="{StaticResource TextButton}" Command="{Binding GoToSchedulesCommand}" />
+                </Grid>
+
+                <VerticalStackLayout IsVisible="{Binding IsEmpty}" Spacing="6" Padding="0,20">
+                    <Label Text="No schedules yet" Style="{StaticResource BodyLabel}" HorizontalOptions="Center" />
+                    <Label Text="Create your first schedule to see activity here." Style="{StaticResource CaptionLabel}" HorizontalOptions="Center" />
+                </VerticalStackLayout>
+
+                <CollectionView ItemsSource="{Binding RecentLogs}" IsVisible="{Binding IsEmpty, Converter={StaticResource InvertedBoolConverter}}">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:ExecutionLog">
+                            <Border Style="{StaticResource CardFrame}" Padding="14">
+                                <Grid ColumnDefinitions="Auto, *, Auto">
+                                    <Border Grid.Column="0" WidthRequest="10" HeightRequest="10" StrokeThickness="0"
+                                            StrokeShape="RoundRectangle 5"
+                                            BackgroundColor="{Binding Result, Converter={StaticResource ExecutionResultToColorConverter}}"
+                                            VerticalOptions="Center" Margin="0,0,10,0" />
+                                    <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                        <Label Text="{Binding Session}" FontAttributes="Bold" Style="{StaticResource BodyLabel}" />
+                                        <Label Text="{Binding Time, StringFormat='{0:MMM d, h:mm tt}'}" Style="{StaticResource CaptionLabel}" />
+                                    </VerticalStackLayout>
+                                    <Label Grid.Column="2" Text="{Binding Result}" Style="{StaticResource CaptionLabel}" VerticalOptions="Center" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </RefreshView>
+</ContentPage>
