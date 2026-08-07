@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Attendance.ViewModels"
+             xmlns:behaviors="clr-namespace:Attendance.Behaviors"
+             x:Class="Attendance.Pages.SettingsPage"
+             x:DataType="vm:SettingsViewModel"
+             Title="{Binding Title}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="18" Spacing="16">
+
+            <Label Text="Settings" Style="{StaticResource TitleLabel}" />
+
+            <Label Text="API Configuration" Style="{StaticResource SectionHeaderLabel}" Margin="0,6,0,0" />
+
+            <Label Text="API Base URL" Style="{StaticResource CaptionLabel}" />
+            <Border Style="{StaticResource InputCard}">
+                <Entry Placeholder="https://api.example.com" Text="{Binding ApiBaseUrl}" Keyboard="Url" />
+            </Border>
+
+            <Grid ColumnDefinitions="*, *" ColumnSpacing="12">
+                <VerticalStackLayout Grid.Column="0" Spacing="4">
+                    <Label Text="Timeout (sec)" Style="{StaticResource CaptionLabel}" />
+                    <Border Style="{StaticResource InputCard}">
+                        <Entry Text="{Binding TimeoutSeconds}" Keyboard="Numeric" Unfocused="OnNumericFieldUnfocused">
+                            <Entry.Behaviors>
+                                <behaviors:NumericValidationBehavior />
+                            </Entry.Behaviors>
+                        </Entry>
+                    </Border>
+                </VerticalStackLayout>
+                <VerticalStackLayout Grid.Column="1" Spacing="4">
+                    <Label Text="Retry Count" Style="{StaticResource CaptionLabel}" />
+                    <Border Style="{StaticResource InputCard}">
+                        <Entry Text="{Binding RetryCount}" Keyboard="Numeric" Unfocused="OnNumericFieldUnfocused">
+                            <Entry.Behaviors>
+                                <behaviors:NumericValidationBehavior />
+                            </Entry.Behaviors>
+                        </Entry>
+                    </Border>
+                </VerticalStackLayout>
+            </Grid>
+
+            <Label Text="Appearance" Style="{StaticResource SectionHeaderLabel}" Margin="0,10,0,0" />
+            <Border Style="{StaticResource CardFrame}">
+                <Grid ColumnDefinitions="*, Auto">
+                    <Label Grid.Column="0" Text="Dark Mode" Style="{StaticResource BodyLabel}" VerticalOptions="Center" />
+                    <Switch Grid.Column="1" IsToggled="{Binding IsDarkMode}" />
+                </Grid>
+            </Border>
+
+            <Label Text="Notifications" Style="{StaticResource SectionHeaderLabel}" Margin="0,10,0,0" />
+            <Border Style="{StaticResource CardFrame}">
+                <Grid ColumnDefinitions="*, Auto">
+                    <Label Grid.Column="0" Text="Execution Notifications" Style="{StaticResource BodyLabel}" VerticalOptions="Center" />
+                    <Switch Grid.Column="1" IsToggled="{Binding NotificationsEnabled}" />
+                </Grid>
+            </Border>
+
+            <Label Text="Background Execution" Style="{StaticResource SectionHeaderLabel}" Margin="0,10,0,0" />
+            <Border Style="{StaticResource CardFrame}">
+                <VerticalStackLayout Spacing="10">
+                    <Grid ColumnDefinitions="*, Auto">
+                        <Label Grid.Column="0" Text="Background Service Status" Style="{StaticResource BodyLabel}" VerticalOptions="Center" />
+                        <Border Grid.Column="1" Style="{StaticResource StatusPill}">
+                            <Label Text="{Binding BackgroundServiceStatus}" Style="{StaticResource CaptionLabel}" />
+                        </Border>
+                    </Grid>
+                    <Button Text="Battery Optimization Guide" Style="{StaticResource SecondaryButton}"
+                            Command="{Binding ShowBatteryGuideCommand}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Button Text="Log Out" Style="{StaticResource DangerButton}" Command="{Binding LogoutCommand}" Margin="0,10,0,0" />
+
+            <Label Text="{Binding AppVersion, StringFormat='Version {0}'}"
+                   Style="{StaticResource CaptionLabel}"
+                   HorizontalOptions="Center"
+                   Margin="0,10,0,0" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

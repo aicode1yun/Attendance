@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Attendance.ViewModels"
+             xmlns:models="clr-namespace:Attendance.Models"
+             x:Class="Attendance.Pages.LogsPage"
+             x:DataType="vm:LogsViewModel"
+             Title="{Binding Title}">
+
+    <RefreshView Command="{Binding AppearingCommand}" IsRefreshing="{Binding IsBusy}">
+        <ScrollView>
+            <VerticalStackLayout Padding="18" Spacing="14">
+
+                <Label Text="Execution Logs" Style="{StaticResource TitleLabel}" />
+
+                <Border Style="{StaticResource InputCard}">
+                    <SearchBar Placeholder="Search by date, request ID or error"
+                               Text="{Binding SearchText}"
+                               BackgroundColor="Transparent" />
+                </Border>
+
+                <CollectionView ItemsSource="{Binding Filters}" SelectionMode="Single"
+                                 SelectedItem="{Binding SelectedFilter}"
+                                 HeightRequest="44">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Horizontal" ItemSpacing="8" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="x:String">
+                            <Border Style="{StaticResource StatusPill}">
+                                <Label Text="{Binding .}" Style="{StaticResource BodyLabel}" />
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <VerticalStackLayout IsVisible="{Binding IsEmpty}" Spacing="6" Padding="0,50">
+                    <Label Text="No executions found" Style="{StaticResource BodyLabel}" HorizontalOptions="Center" />
+                    <Label Text="Runs will appear here once your scheduler executes." Style="{StaticResource CaptionLabel}" HorizontalOptions="Center" />
+                </VerticalStackLayout>
+
+                <CollectionView ItemsSource="{Binding Logs}" IsVisible="{Binding IsEmpty, Converter={StaticResource InvertedBoolConverter}}">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:ExecutionLog">
+                            <Border Style="{StaticResource CardFrame}">
+                                <VerticalStackLayout Spacing="8">
+                                    <Grid ColumnDefinitions="Auto, *, Auto">
+                                        <Border Grid.Column="0" WidthRequest="10" HeightRequest="10" StrokeThickness="0"
+                                                StrokeShape="RoundRectangle 5"
+                                                BackgroundColor="{Binding Result, Converter={StaticResource ExecutionResultToColorConverter}}"
+                                                VerticalOptions="Center" Margin="0,0,10,0" />
+                                        <Label Grid.Column="1" Text="{Binding Session}" FontAttributes="Bold" Style="{StaticResource BodyLabel}" />
+                                        <Label Grid.Column="2" Text="{Binding Result}" Style="{StaticResource CaptionLabel}" />
+                                    </Grid>
+                                    <Label Text="{Binding Date, StringFormat='{0:MMM d, yyyy}'} · {Binding Time, StringFormat='{0:h:mm tt}'}"
+                                           Style="{StaticResource CaptionLabel}" />
+
+                                    <Grid ColumnDefinitions="*, *, *" Margin="0,6,0,0">
+                                        <VerticalStackLayout Grid.Column="0" Spacing="1">
+                                            <Label Text="HTTP" Style="{StaticResource CaptionLabel}" />
+                                            <Label Text="{Binding HttpStatus}" Style="{StaticResource BodyLabel}" />
+                                        </VerticalStackLayout>
+                                        <VerticalStackLayout Grid.Column="1" Spacing="1">
+                                            <Label Text="Duration" Style="{StaticResource CaptionLabel}" />
+                                            <Label Text="{Binding DurationMs, StringFormat='{0:0} ms'}" Style="{StaticResource BodyLabel}" />
+                                        </VerticalStackLayout>
+                                        <VerticalStackLayout Grid.Column="2" Spacing="1">
+                                            <Label Text="Retries" Style="{StaticResource CaptionLabel}" />
+                                            <Label Text="{Binding RetryCount}" Style="{StaticResource BodyLabel}" />
+                                        </VerticalStackLayout>
+                                    </Grid>
+
+                                    <Label Text="{Binding ErrorMessage}"
+                                           Style="{StaticResource ErrorLabel}"
+                                           IsVisible="{Binding ErrorMessage, Converter={StaticResource StringNotEmptyConverter}}" />
+
+                                    <Label Text="{Binding RequestId, StringFormat='Request ID: {0}'}" Style="{StaticResource CaptionLabel}" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </RefreshView>
+</ContentPage>
