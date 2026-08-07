@@ -1,15 +1,60 @@
-﻿<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <Shell
     x:Class="Attendance.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:Attendance"
-    Shell.FlyoutBehavior="Disabled">
+    xmlns:pages="clr-namespace:Attendance.Pages"
+    Shell.FlyoutBehavior="Disabled"
+    FlyoutBehavior="Disabled">
 
     <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+        Route="SplashPage"
+        ContentTemplate="{DataTemplate pages:SplashPage}"
+        Shell.NavBarIsVisible="False" />
+
+    <ShellContent
+        Route="LoginPage"
+        ContentTemplate="{DataTemplate pages:LoginPage}"
+        Shell.NavBarIsVisible="False" />
+
+    <TabBar Route="AppTabs">
+
+        <ShellContent
+            Title="Dashboard"
+            Route="DashboardPage"
+            ContentTemplate="{DataTemplate pages:DashboardPage}">
+            <ShellContent.Icon>
+                <FontImageSource Glyph="&#127968;" Color="{StaticResource Gray400}" Size="22" />
+            </ShellContent.Icon>
+        </ShellContent>
+
+        <ShellContent
+            Title="Schedules"
+            Route="SchedulesPage"
+            ContentTemplate="{DataTemplate pages:ScheduleListPage}">
+            <ShellContent.Icon>
+                <FontImageSource Glyph="&#128197;" Color="{StaticResource Gray400}" Size="22" />
+            </ShellContent.Icon>
+        </ShellContent>
+
+        <ShellContent
+            Title="Logs"
+            Route="LogsPage"
+            ContentTemplate="{DataTemplate pages:LogsPage}">
+            <ShellContent.Icon>
+                <FontImageSource Glyph="&#128203;" Color="{StaticResource Gray400}" Size="22" />
+            </ShellContent.Icon>
+        </ShellContent>
+
+        <ShellContent
+            Title="Settings"
+            Route="SettingsPage"
+            ContentTemplate="{DataTemplate pages:SettingsPage}">
+            <ShellContent.Icon>
+                <FontImageSource Glyph="&#9881;" Color="{StaticResource Gray400}" Size="22" />
+            </ShellContent.Icon>
+        </ShellContent>
+
+    </TabBar>
 
 </Shell>
-
