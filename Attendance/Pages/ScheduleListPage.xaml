@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Attendance.ViewModels"
+             xmlns:models="clr-namespace:Attendance.Models"
+             x:Class="Attendance.Pages.ScheduleListPage"
+             x:DataType="vm:ScheduleListViewModel"
+             x:Name="RootPage"
+             Title="{Binding Title}">
+
+    <Grid>
+        <RefreshView Command="{Binding AppearingCommand}" IsRefreshing="{Binding IsBusy}">
+            <ScrollView>
+                <VerticalStackLayout Padding="18" Spacing="14">
+
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="Schedules" Style="{StaticResource TitleLabel}" />
+                        <Label Text="Automate your morning and evening attendance." Style="{StaticResource SubtitleLabel}" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout IsVisible="{Binding IsEmpty}" Spacing="8" Padding="0,60">
+                        <Label Text="No schedules yet" Style="{StaticResource SectionHeaderLabel}" HorizontalOptions="Center" />
+                        <Label Text="Tap the button below to create your first schedule." Style="{StaticResource CaptionLabel}"
+                               HorizontalOptions="Center" HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
+
+                    <CollectionView ItemsSource="{Binding Schedules}" IsVisible="{Binding IsEmpty, Converter={StaticResource InvertedBoolConverter}}">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Vertical" ItemSpacing="12" />
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:Schedule">
+                                <Border Style="{StaticResource CardFrame}">
+                                    <Grid RowDefinitions="Auto, Auto, Auto" ColumnDefinitions="*, Auto">
+
+                                        <Label Grid.Row="0" Grid.Column="0" Text="{Binding Name}"
+                                               Style="{StaticResource SectionHeaderLabel}" />
+                                        <Switch Grid.Row="0" Grid.Column="1"
+                                                IsToggled="{Binding IsEnabled}"
+                                                Toggled="OnScheduleEnabledToggled" />
+
+                                        <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                               Text="{Binding DaysSummary}" Style="{StaticResource BodyLabel}" Margin="0,4,0,0" />
+
+                                        <HorizontalStackLayout Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Spacing="18" Margin="0,10,0,0">
+                                            <VerticalStackLayout Spacing="1">
+                                                <Label Text="Morning" Style="{StaticResource CaptionLabel}" />
+                                                <Label Text="{Binding MorningTime, StringFormat='{0:hh\\:mm}'}" Style="{StaticResource BodyLabel}" FontAttributes="Bold" />
+                                            </VerticalStackLayout>
+                                            <VerticalStackLayout Spacing="1">
+                                                <Label Text="Evening" Style="{StaticResource CaptionLabel}" />
+                                                <Label Text="{Binding EveningTime, StringFormat='{0:hh\\:mm}'}" Style="{StaticResource BodyLabel}" FontAttributes="Bold" />
+                                            </VerticalStackLayout>
+                                        </HorizontalStackLayout>
+
+                                        <HorizontalStackLayout Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Spacing="10" Margin="0,12,0,0">
+                                            <Button Text="Edit" Style="{StaticResource SecondaryButton}" Padding="16,8" MinimumHeightRequest="0"
+                                                    Command="{Binding BindingContext.EditScheduleCommand, Source={x:Reference RootPage}}"
+                                                    CommandParameter="{Binding .}" />
+                                            <Button Text="Delete" Style="{StaticResource DangerButton}" Padding="16,8" MinimumHeightRequest="0"
+                                                    Command="{Binding BindingContext.DeleteScheduleCommand, Source={x:Reference RootPage}}"
+                                                    CommandParameter="{Binding .}" />
+                                        </HorizontalStackLayout>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <BoxView HeightRequest="90" Color="Transparent" />
+                </VerticalStackLayout>
+            </ScrollView>
+        </RefreshView>
+
+        <Button Text="+ New Schedule"
+                Command="{Binding AddScheduleCommand}"
+                HorizontalOptions="Center"
+                VerticalOptions="End"
+                Margin="0,0,0,24" />
+    </Grid>
+</ContentPage>

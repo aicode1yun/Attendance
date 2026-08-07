@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Attendance.ViewModels"
+             x:Class="Attendance.Pages.ScheduleEditPage"
+             x:DataType="vm:ScheduleEditViewModel"
+             Title="{Binding Title}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="18" Spacing="16">
+
+            <Label Text="Schedule Name" Style="{StaticResource CaptionLabel}" />
+            <Border Style="{StaticResource InputCard}">
+                <Entry Placeholder="e.g. Head Office Shift" Text="{Binding Name}" />
+            </Border>
+
+            <Label Text="Type" Style="{StaticResource CaptionLabel}" Margin="0,8,0,0" />
+            <Grid ColumnDefinitions="*, *" ColumnSpacing="10">
+                <RadioButton Grid.Column="0" IsChecked="{Binding IsWeekly, Converter={StaticResource InvertedBoolConverter}}"
+                             Content="Daily" GroupName="ScheduleType" />
+                <RadioButton Grid.Column="1" IsChecked="{Binding IsWeekly}"
+                             Content="Weekly" GroupName="ScheduleType" />
+            </Grid>
+
+            <VerticalStackLayout IsVisible="{Binding IsWeekly}" Spacing="10" Margin="0,4,0,0">
+                <Label Text="Repeat On" Style="{StaticResource CaptionLabel}" />
+                <Grid ColumnDefinitions="*,*,*,*,*,*,*" ColumnSpacing="6">
+                    <Border Grid.Column="0" Style="{StaticResource DayChip}">
+                        <CheckBox IsChecked="{Binding IsSunday}" HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Border>
+                    <Border Grid.Column="1" Style="{StaticResource DayChip}">
+                        <CheckBox IsChecked="{Binding IsMonday}" HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Border>
+                    <Border Grid.Column="2" Style="{StaticResource DayChip}">
+                        <CheckBox IsChecked="{Binding IsTuesday}" HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Border>
+                    <Border Grid.Column="3" Style="{StaticResource DayChip}">
+                        <CheckBox IsChecked="{Binding IsWednesday}" HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Border>
+                    <Border Grid.Column="4" Style="{StaticResource DayChip}">
+                        <CheckBox IsChecked="{Binding IsThursday}" HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Border>
+                    <Border Grid.Column="5" Style="{StaticResource DayChip}">
+                        <CheckBox IsChecked="{Binding IsFriday}" HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Border>
+                    <Border Grid.Column="6" Style="{StaticResource DayChip}">
+                        <CheckBox IsChecked="{Binding IsSaturday}" HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Border>
+                </Grid>
+                <Grid ColumnDefinitions="*,*,*,*,*,*,*" ColumnSpacing="6">
+                    <Label Grid.Column="0" Text="Sun" Style="{StaticResource CaptionLabel}" HorizontalOptions="Center" />
+                    <Label Grid.Column="1" Text="Mon" Style="{StaticResource CaptionLabel}" HorizontalOptions="Center" />
+                    <Label Grid.Column="2" Text="Tue" Style="{StaticResource CaptionLabel}" HorizontalOptions="Center" />
+                    <Label Grid.Column="3" Text="Wed" Style="{StaticResource CaptionLabel}" HorizontalOptions="Center" />
+                    <Label Grid.Column="4" Text="Thu" Style="{StaticResource CaptionLabel}" HorizontalOptions="Center" />
+                    <Label Grid.Column="5" Text="Fri" Style="{StaticResource CaptionLabel}" HorizontalOptions="Center" />
+                    <Label Grid.Column="6" Text="Sat" Style="{StaticResource CaptionLabel}" HorizontalOptions="Center" />
+                </Grid>
+            </VerticalStackLayout>
+
+            <Label Text="Morning · Clock In" Style="{StaticResource CaptionLabel}" Margin="0,8,0,0" />
+            <Border Style="{StaticResource InputCard}">
+                <TimePicker Time="{Binding MorningTime}" />
+            </Border>
+
+            <Label Text="Evening · Clock Out" Style="{StaticResource CaptionLabel}" />
+            <Border Style="{StaticResource InputCard}">
+                <TimePicker Time="{Binding EveningTime}" />
+            </Border>
+
+            <Grid ColumnDefinitions="*, Auto" Margin="0,8,0,0">
+                <Label Grid.Column="0" Text="Enabled" Style="{StaticResource BodyLabel}" VerticalOptions="Center" />
+                <Switch Grid.Column="1" IsToggled="{Binding IsEnabled}" />
+            </Grid>
+
+            <Label Text="{Binding ErrorMessage}"
+                   Style="{StaticResource ErrorLabel}"
+                   IsVisible="{Binding HasError}" />
+
+            <Grid ColumnDefinitions="*, *" ColumnSpacing="12" Margin="0,10,0,0">
+                <Button Grid.Column="0" Text="Cancel" Style="{StaticResource SecondaryButton}" Command="{Binding CancelCommand}" />
+                <Button Grid.Column="1" Text="Save Schedule" Command="{Binding SaveCommand}" />
+            </Grid>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
