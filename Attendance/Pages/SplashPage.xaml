@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Attendance.Pages.SplashPage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{StaticResource Primary}">
+
+    <Grid RowDefinitions="*, Auto, *" Padding="40">
+
+        <VerticalStackLayout Grid.Row="1" Spacing="18" HorizontalOptions="Center" VerticalOptions="Center">
+
+            <Border x:Name="LogoBadge"
+                    WidthRequest="96" HeightRequest="96"
+                    StrokeShape="RoundRectangle 24"
+                    StrokeThickness="0"
+                    BackgroundColor="White"
+                    HorizontalOptions="Center"
+                    Scale="0.8" Opacity="0">
+                <Label Text="&#128337;"
+                       FontSize="46"
+                       TextColor="{StaticResource Primary}"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center" />
+            </Border>
+
+            <Label Text="Attendance Scheduler"
+                   FontSize="22"
+                   FontAttributes="Bold"
+                   TextColor="White"
+                   HorizontalOptions="Center"
+                   Opacity="0"
+                   x:Name="TitleLabel" />
+
+            <Label Text="Automating your day, on time, every time."
+                   FontSize="13"
+                   TextColor="#DCE0FF"
+                   HorizontalOptions="Center"
+                   Opacity="0"
+                   x:Name="SubtitleLabel" />
+
+            <ActivityIndicator IsRunning="True" Color="White" Margin="0,16,0,0" />
+
+        </VerticalStackLayout>
+
+    </Grid>
+</ContentPage>

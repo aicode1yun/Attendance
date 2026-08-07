@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Attendance.ViewModels"
+             x:Class="Attendance.Pages.LoginPage"
+             x:DataType="vm:LoginViewModel"
+             Shell.NavBarIsVisible="False">
+
+    <ScrollView>
+        <Grid Padding="28,0" RowDefinitions="*, Auto, *" MinimumHeightRequest="640">
+
+            <VerticalStackLayout x:Name="FormLayout" Grid.Row="1" Spacing="10" VerticalOptions="Center">
+
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="SizeStates">
+                            <VisualState x:Name="Normal" />
+                            <VisualState x:Name="Wide">
+                                <VisualState.Setters>
+                                    <Setter Property="MaximumWidthRequest" Value="440" />
+                                    <Setter Property="HorizontalOptions" Value="Center" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </VisualStateManager.VisualStateGroups>
+
+                <Border WidthRequest="72" HeightRequest="72"
+                        StrokeShape="RoundRectangle 20" StrokeThickness="0"
+                        BackgroundColor="{StaticResource Primary}"
+                        HorizontalOptions="Center" Margin="0,0,0,8">
+                    <Label Text="&#128337;" FontSize="34"
+                           TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" />
+                </Border>
+
+                <Label Text="Welcome back" Style="{StaticResource TitleLabel}" HorizontalOptions="Center" />
+                <Label Text="Sign in to manage your attendance schedule" Style="{StaticResource SubtitleLabel}"
+                       HorizontalOptions="Center" HorizontalTextAlignment="Center" Margin="0,0,0,20" />
+
+                <Border Style="{StaticResource InputCard}">
+                    <Entry Placeholder="Email address"
+                           Keyboard="Email"
+                           Text="{Binding Email}"
+                           ReturnType="Next" />
+                </Border>
+
+                <Border Style="{StaticResource InputCard}">
+                    <Grid ColumnDefinitions="*, Auto">
+                        <Entry Grid.Column="0"
+                               Placeholder="Password"
+                               Text="{Binding Password}"
+                               IsPassword="{Binding IsPasswordHidden}"
+                               ReturnType="Done" />
+                        <Button Grid.Column="1"
+                                Text="{Binding IsPasswordHidden, Converter={StaticResource BoolToShowHideConverter}}"
+                                Style="{StaticResource TextButton}"
+                                Command="{Binding TogglePasswordVisibilityCommand}" />
+                    </Grid>
+                </Border>
+
+                <Label Text="{Binding ErrorMessage}"
+                       Style="{StaticResource ErrorLabel}"
+                       IsVisible="{Binding HasError}"
+                       Margin="4,4,4,0" />
+
+                <Grid ColumnDefinitions="Auto, *" Margin="4,10,4,4">
+                    <HorizontalStackLayout Grid.Column="0" Spacing="8" VerticalOptions="Center">
+                        <Switch IsToggled="{Binding RememberMe}" Scale="0.8" />
+                        <Label Text="Remember me" Style="{StaticResource BodyLabel}" VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                    <Button Grid.Column="1"
+                            Text="Forgot password?"
+                            Style="{StaticResource TextButton}"
+                            HorizontalOptions="End"
+                            Command="{Binding ForgotPasswordCommand}" />
+                </Grid>
+
+                <Button Text="Sign In"
+                        Command="{Binding LoginCommand}"
+                        IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}"
+                        Margin="0,10,0,0" />
+
+                <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Margin="0,8,0,0" />
+
+            </VerticalStackLayout>
+
+        </Grid>
+    </ScrollView>
+</ContentPage>
