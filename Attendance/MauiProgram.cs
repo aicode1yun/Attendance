@@ -6,6 +6,7 @@ using Attendance.Services;
 using Attendance.ViewModels;
 using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
+using Plugin.LocalNotification;
 
 namespace Attendance;
 
@@ -17,6 +18,7 @@ public static class MauiProgram
         builder
             .UseMauiApp<App>()
             .UseMauiCommunityToolkit()
+            .UseLocalNotification()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -47,6 +49,10 @@ public static class MauiProgram
         services.AddSingleton<ISettingsService, SettingsService>();
         services.AddSingleton<ILoginService, LoginService>();
         services.AddSingleton<IAttendanceService, AttendanceService>();
+        services.AddSingleton<IAttendanceOrchestrator, AttendanceOrchestrator>();
+        services.AddSingleton<IRetryPolicy, RetryPolicyService>();
+        services.AddSingleton<INotificationService, NotificationService>();
+        services.AddSingleton<IBackgroundScheduler, BackgroundScheduler>();
         services.AddSingleton<ISchedulerService, SchedulerService>();
 
         services.AddTransient<AuthTokenHandler>();

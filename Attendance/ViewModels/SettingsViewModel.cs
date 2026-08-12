@@ -59,7 +59,15 @@ public partial class SettingsViewModel : BaseViewModel
         Application.Current!.UserAppTheme = value ? AppTheme.Dark : AppTheme.Light;
     }
 
-    partial void OnNotificationsEnabledChanged(bool value) => _settingsService.NotificationsEnabled = value;
+    partial void OnNotificationsEnabledChanged(bool value)
+    {
+        _settingsService.NotificationsEnabled = value;
+
+        if (value)
+        {
+            _ = Plugin.LocalNotification.LocalNotificationCenter.Current.RequestNotificationPermission();
+        }
+    }
 
     [RelayCommand]
     private void SaveNumericSettings()
@@ -89,6 +97,7 @@ public partial class SettingsViewModel : BaseViewModel
     {
         _schedulerService.Stop();
         await _loginService.LogoutAsync();
+        await _loginService.ClearStoredCredentialsAsync();
         await Shell.Current.GoToAsync("//LoginPage");
     }
 }
