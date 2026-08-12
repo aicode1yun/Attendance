@@ -14,3 +14,8 @@ public class LoginResponse
     public DateTime? ExpiresAt { get; set; }
     public string? ErrorMessage { get; set; }
 }
+
+public class RefreshTokenRequest
+{
+    public string RefreshToken { get; set; } = string.Empty;
+}
