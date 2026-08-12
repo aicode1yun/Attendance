@@ -72,6 +72,11 @@ public partial class LoginViewModel : BaseViewModel
 
             _settingsService.RememberMe = RememberMe;
 
+            if (RememberMe)
+                await _loginService.SaveCredentialsAsync(Email.Trim(), Password);
+            else
+                await _loginService.ClearStoredCredentialsAsync();
+
             await Shell.Current.GoToAsync("//DashboardPage");
         }
         catch (Exception ex)
