@@ -28,5 +28,16 @@
 	</array>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/appicon.appiconset</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>processing</string>
+		<string>fetch</string>
+	</array>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>com.companyname.attendance.scheduledcheck</string>
+	</array>
+	<key>NSUserNotificationsUsageDescription</key>
+	<string>Attendance Scheduler notifies you when a scheduled clock-in or clock-out completes.</string>
 </dict>
 </plist>
