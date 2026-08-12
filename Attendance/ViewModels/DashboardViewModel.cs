@@ -43,6 +43,7 @@ public partial class DashboardViewModel : BaseViewModel
         Title = "Dashboard";
 
         _schedulerService.StateChanged += (_, state) => SchedulerState = state;
+        _schedulerService.ExecutionCompleted += async (_, _) => await AppearingAsync();
         SchedulerState = _schedulerService.State;
     }
 
